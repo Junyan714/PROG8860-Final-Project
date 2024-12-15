@@ -31,7 +31,6 @@ jobs:
 
       - name: Install and Build React App
         run: |
-          pwd
           cd frontend
           npm install
           npm run build
@@ -56,6 +55,8 @@ jobs:
       - name: Verify Working Directory
         run: |
           pwd
+          cd ..
+          ls
           ls -l
       - name: Deploy Backend to EC2
         run: |
