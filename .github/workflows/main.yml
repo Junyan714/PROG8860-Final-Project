@@ -64,25 +64,3 @@ jobs:
         run: |
           aws s3 sync frontend/build/ s3://react-frontend-bucket-cd3c2ef7b3cfd96c --delete
 
-      - name: Add SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 3.90.254.241 >> ~/.ssh/known_hosts
-
-      - name: Deploy Backend to EC2
-        run: |
-          # Create a tarball of the backend folder
-          tar -czvf backend.tar.gz backend/
-          
-          # Copy the backend.tar.gz to the EC2 instance
-          scp -i ~/.ssh/id_rsa backend.tar.gz ec2-user@3.90.254.241:/home/ec2-user/
-          
-          # SSH into the EC2 instance to extract and restart the Flask application
-          ssh -i ~/.ssh/id_rsa ec2-user@3.90.254.241 << 'EOF'
-          cd /home/ec2-user/
-          tar -xzvf backend.tar.gz
-          # Ensure Flask service restarts (assuming systemd unit is flaskapp)
-          sudo systemctl restart flaskapp
-          EOF
