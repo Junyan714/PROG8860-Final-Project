@@ -24,6 +24,12 @@ jobs:
           source venv/bin/activate
           pip install -r backend/requirements.txt
 
+      - name: test stage
+        run: |
+          cd backend
+          export PYTHONPATH=$(pwd)/backend
+          pytest
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
