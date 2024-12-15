@@ -43,7 +43,9 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploy React to S3
-        run: aws s3 sync build/ s3://react-frontend-bucket-cd3c2ef7b3cfd96c --delete
+        run: 
+          cd frontend
+          aws s3 sync build/ s3://react-frontend-bucket-cd3c2ef7b3cfd96c --delete
 
   deploy:
     runs-on: ubuntu-latest
