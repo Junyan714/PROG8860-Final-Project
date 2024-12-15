@@ -53,7 +53,7 @@ jobs:
     needs: build
     steps:
       - name: Deploy Backend to EC2
-        working-directory: frontend
+        working-directory: /
         run: |
           ls
           # Compress the backend folder for transfer
