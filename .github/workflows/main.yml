@@ -26,8 +26,9 @@ jobs:
 
       - name: test stage
         run: |
+          source venv/bin/activate
           cd backend
-          export PYTHONPATH=$(pwd)/backend
+          export PYTHONPATH=$(pwd)
           pytest
 
       - name: Set up Node.js
