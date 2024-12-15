@@ -59,8 +59,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-
       - name: Deploy React to S3
         run: |
           aws s3 sync frontend/build/ s3://react-frontend-bucket-cd3c2ef7b3cfd96c --delete
 
+      - name: Set up SSH
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > ec2_key.pem
+          chmod 600 ec2_key.pem
+
+      - name: Deploy Backend to EC2
+        run: |
+          scp -i ec2_key.pem -o StrictHostKeyChecking=no -r backend/ ubuntu@3.90.254.241:/home/ubuntu/backend
+          ssh -i ec2_key.pem -o StrictHostKeyChecking=no ubuntu@3.90.254.241 << 'EOF'
+          cd /home/ubuntu/backend
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          pkill -f "flask run" || true
+          nohup flask run --host=0.0.0.0 --port=5000 &
+          EOF
