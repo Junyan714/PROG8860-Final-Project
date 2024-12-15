@@ -53,8 +53,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Verify Working Directory
+        run: |
+          pwd
+          ls -l
       - name: Deploy Backend to EC2
         run: |
+          # Check backend folder exists
+          ls -l backend/
           # Create a tarball of the backend folder
           tar -czvf backend.tar.gz backend/
           
