@@ -35,33 +35,30 @@ jobs:
           npm install
           npm run build
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: Deploy React to S3
-        working-directory: frontend
-        run: |
-          aws s3 sync build/ s3://react-frontend-bucket-cd3c2ef7b3cfd96c --delete
-
+          name: app-files
+          path: |
+            frontend/build
+            backend/
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Verify Working Directory
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: app-files
+
+
+      - name: Deploy React to S3
         run: |
-          pwd
-          cd ..
-          ls
-          ls -l
+          aws s3 sync frontend/build/ s3://react-frontend-bucket-cd3c2ef7b3cfd96c --delete
+
       - name: Deploy Backend to EC2
         run: |
-          # Check backend folder exists
-          ls -l backend/
           # Create a tarball of the backend folder
           tar -czvf backend.tar.gz backend/
           
@@ -75,6 +72,3 @@ jobs:
           # Ensure Flask service restarts (assuming systemd unit is flaskapp)
           sudo systemctl restart flaskapp
           EOF
-
-
-
