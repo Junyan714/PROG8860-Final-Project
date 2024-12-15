@@ -54,7 +54,7 @@ jobs:
     steps:
       - name: Deploy Backend to EC2
         run: |
-          ls
+          pwd
           # Compress the backend folder for transfer
           zip -r backend.zip backend/
           
