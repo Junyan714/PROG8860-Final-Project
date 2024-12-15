@@ -64,6 +64,13 @@ jobs:
         run: |
           aws s3 sync frontend/build/ s3://react-frontend-bucket-cd3c2ef7b3cfd96c --delete
 
+      - name: Add SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 3.90.254.241 >> ~/.ssh/known_hosts
+
       - name: Deploy Backend to EC2
         run: |
           # Create a tarball of the backend folder
