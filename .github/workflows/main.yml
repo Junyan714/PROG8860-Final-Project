@@ -79,6 +79,7 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
           pkill -f "flask run" || true
-          nohup flask run --host=0.0.0.0 --port=5000 &
+          # Start Flask in background using nohup
+          nohup flask run --host=0.0.0.0 --port=5000 > flask.log 2>&1 &
           EOF
 

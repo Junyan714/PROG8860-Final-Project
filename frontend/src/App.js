@@ -4,7 +4,7 @@ function App() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/api/greeting') 
+    fetch('http://3.90.254.241:5000/api/greeting') 
       .then(response => response.json())
       .then(data => {
         console.log('Fetched message:', data.message); // 查看数据
