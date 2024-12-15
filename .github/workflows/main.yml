@@ -57,7 +57,7 @@ jobs:
         run: |
           pwd
           # Compress the backend folder for transfer
-          zip -r backend.zip backend/
+          zip -r backend.zip backend
           
           # Copy the backend.zip to the EC2 instance
           scp -i ~/.ssh/id_rsa backend.zip ec2-user@3.90.254.241:/home/ec2-user/
