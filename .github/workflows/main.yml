@@ -53,8 +53,8 @@ jobs:
     needs: build
     steps:
       - name: Deploy Backend to EC2
-        working-directory: PROG8860-Final-Project
         run: |
+          ls
           # Compress the backend folder for transfer
           zip -r backend.zip backend/
           
