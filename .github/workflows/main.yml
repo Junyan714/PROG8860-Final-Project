@@ -72,10 +72,13 @@ jobs:
         run: |
           scp -i ec2_key.pem -o StrictHostKeyChecking=no -r backend/ ubuntu@3.90.254.241:/home/ubuntu/backend
           ssh -i ec2_key.pem -o StrictHostKeyChecking=no ubuntu@3.90.254.241 << 'EOF'
+          sudo apt update
+          sudo apt install python3 python3-pip python3-venv -y
           cd /home/ubuntu/backend
           python3 -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
-          pkill -f "python app.py" || true
-          nohup python app.py &
+          pkill -f "flask run" || true
+          nohup flask run --host=0.0.0.0 --port=5000 &
           EOF
+
